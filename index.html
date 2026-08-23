@@ -3,150 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Bean - Getting Started</title>
+    <title>AWS GitHub to Elastic Beanstalk CI/CD Guide</title>
     <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #5b6472;
+            --blue: #2563eb;
+            --green: #16a34a;
+            --orange: #ea580c;
+            --red: #dc2626;
+            --border: #dbe3ef;
+            --code: #111827;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        header {
+            background: linear-gradient(135deg, #111827, #1e3a8a);
+            color: white;
+            padding: 50px 20px;
         }
-        h1 {
-            color: #333;
+
+        header .wrap, main {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 { margin: 0 0 10px; font-size: 38px; }
+        h2 { margin-top: 0; color: #111827; }
+        h3 { color: #1e3a8a; }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: .9;
+            max-width: 780px;
+        }
+
+        main { padding: 30px 20px 60px; }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            margin: 22px 0;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
+        }
+
+        .flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .flow .box {
+            padding: 14px 18px;
+            border: 2px solid var(--blue);
+            border-radius: 10px;
+            background: #eff6ff;
+            font-weight: bold;
             text-align: center;
         }
-        .intro {
-            background-color: #e8f4f8;
-            padding: 20px;
-            border-left: 4px solid #2196F3;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .version {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2196F3;
-            margin: 15px 0;
-        }
-        .steps {
-            margin-top: 30px;
-        }
+
+        .arrow { font-size: 24px; color: var(--muted); }
+
         .step {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #4CAF50;
-            border-radius: 4px;
+            border-left: 5px solid var(--blue);
+            padding: 15px 20px;
+            margin: 18px 0;
+            background: #f8fbff;
         }
-        .step h3 {
-            color: #333;
-            margin-top: 0;
+
+        .success {
+            border-left-color: var(--green);
+            background: #f0fdf4;
         }
-        .step p {
-            margin: 10px 0;
-            color: #555;
+
+        .warning {
+            border-left-color: var(--orange);
+            background: #fff7ed;
         }
+
+        .error {
+            border-left-color: var(--red);
+            background: #fef2f2;
+        }
+
         code {
-            background-color: #f0f0f0;
+            background: #eef2f7;
             padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        }
+
+        pre {
+            background: var(--code);
+            color: #e5e7eb;
+            padding: 18px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        ul, ol { padding-left: 25px; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-right: 6px;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th { background: #eff6ff; }
+
+        .check {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌱 Elastic Bean</h1>
-        
-        <div class="intro">
-            <p>Welcome to Elastic Bean! This is a comprehensive guide to help you get started with creating and deploying applications using AWS Elastic Beanstalk. Elastic Bean simplifies the process of deploying web applications and services to the cloud, handling the infrastructure so you can focus on your code.</p>
-        </div>
 
-        <div class="version">
-            ✓ First Version for Elastic Bean
-        </div>
-
-        <div class="steps">
-            <h2>Steps to Create Elastic Bean</h2>
-
-            <div class="step">
-                <h3>Step 1: Install AWS CLI</h3>
-                <p>First, you need to install the AWS Command Line Interface (CLI) on your machine.</p>
-                <p><code>pip install awscli</code></p>
-                <p>Verify the installation with: <code>aws --version</code></p>
-            </div>
-
-            <div class="step">
-                <h3>Step 2: Configure AWS Credentials</h3>
-                <p>Set up your AWS credentials using:</p>
-                <p><code>aws configure</code></p>
-                <p>You'll be prompted to enter your AWS Access Key ID, Secret Access Key, default region, and output format.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 3: Install Elastic Beanstalk CLI</h3>
-                <p>Install the Elastic Beanstalk command line tool:</p>
-                <p><code>pip install awsebcli</code></p>
-                <p>Verify with: <code>eb --version</code></p>
-            </div>
-
-            <div class="step">
-                <h3>Step 4: Create Your Application</h3>
-                <p>Prepare your application code in a directory. For a Python app, create a simple structure:</p>
-                <p><code>application.py</code> or <code>app.py</code></p>
-                <p>Make sure your application listens on port 5000 or configure the appropriate port.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 5: Initialize Elastic Beanstalk</h3>
-                <p>Navigate to your application directory and initialize Elastic Beanstalk:</p>
-                <p><code>eb init -p python-3.9 my-app</code></p>
-                <p>Choose your default region and other preferences when prompted.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 6: Create an Environment</h3>
-                <p>Create an Elastic Beanstalk environment for your application:</p>
-                <p><code>eb create production-env</code></p>
-                <p>This will set up the necessary AWS resources (EC2 instances, load balancers, etc.)</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 7: Deploy Your Application</h3>
-                <p>Deploy your code to the environment:</p>
-                <p><code>eb deploy</code></p>
-                <p>Your application will be uploaded and deployed automatically.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 8: Open Your Application</h3>
-                <p>View your deployed application in the browser:</p>
-                <p><code>eb open</code></p>
-                <p>This will automatically open your application URL in your default browser.</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 9: Monitor Your Application</h3>
-                <p>Check the health and logs of your application:</p>
-                <p><code>eb health</code> - View environment health</p>
-                <p><code>eb logs</code> - View application logs</p>
-            </div>
-
-            <div class="step">
-                <h3>Step 10: Clean Up</h3>
-                <p>When done, terminate your environment to avoid incurring charges:</p>
-                <p><code>eb terminate production-env</code></p>
-            </div>
+<header>
+    <div class="wrap">
+        <h1>AWS GitHub → CodePipeline → Elastic Beanstalk</h1>
+        <div class="subtitle">
+            A step-by-step record of the CI/CD pipeline setup: GitHub source,
+            Elastic Beanstalk staging, manual approval, and production deployment.
         </div>
     </div>
+</header>
+
+<main>
+
+    <section class="card">
+        <h2>1. Final Architecture</h2>
+
+        <div class="flow">
+            <div class="box">GitHub<br><small>main branch</small></div>
+            <div class="arrow">→</div>
+            <div class="box">CodePipeline<br><small>Source</small></div>
+            <div class="arrow">→</div>
+            <div class="box">Elastic Beanstalk<br><small>Staging</small></div>
+            <div class="arrow">→</div>
+            <div class="box">Manual Approval</div>
+            <div class="arrow">→</div>
+            <div class="box">Elastic Beanstalk<br><small>Production</small></div>
+        </div>
+
+        <p>
+            One CodePipeline controls the complete promotion process.
+            A second CodePipeline is not required.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>2. GitHub Repository</h2>
+
+        <table>
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Repository</td>
+                <td><code>raj-shekhar-singh09/elasticBean</code></td>
+            </tr>
+            <tr>
+                <td>Branch</td>
+                <td><code>main</code></td>
+            </tr>
+            <tr>
+                <td>Application</td>
+                <td>HTML/PHP application for Elastic Beanstalk</td>
+            </tr>
+        </table>
+
+        <p>
+            The repository initially contained <code>index.html</code>.
+            If using the PHP Elastic Beanstalk platform, the page can also be
+            named <code>index.php</code> if PHP code needs to be executed.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>3. Connect GitHub to AWS</h2>
+
+        <div class="step success">
+            <strong>GitHub connection:</strong>
+            GitHub via GitHub App / AWS CodeConnections.
+        </div>
+
+        <ol>
+            <li>Open AWS CodePipeline.</li>
+            <li>Create a new pipeline.</li>
+            <li>Select <strong>Build custom pipeline</strong>.</li>
+            <li>For the source provider, select <strong>GitHub (via GitHub App)</strong>.</li>
+            <li>Create or select the GitHub connection.</li>
+            <li>Select <code>raj-shekhar-singh09/elasticBean</code>.</li>
+            <li>Select the <code>main</code> branch.</li>
+            <li>Use the <strong>CodePipeline default</strong> output artifact format.</li>
+        </ol>
+
+        <p>
+            The important repository format is:
+        </p>
+
+        <pre>GitHubUsername/RepositoryName
+raj-shekhar-singh09/elasticBean</pre>
+    </section>
+
+    <section class="card">
+        <h2>4. Why We Used a Custom Pipeline</h2>
+
+        <p>
+            The initial CodePipeline template page showed Docker-oriented
+            templates such as Push to ECR and Deploy to ECS Fargate.
+            Those were not appropriate for this setup.
+        </p>
+
+        <div class="step warning">
+            <strong>Do not use:</strong> Push to ECR, ECS Fargate,
+            CloudFormation, or Terraform for this simple Elastic Beanstalk flow.
+        </div>
+
+        <p>
+            We selected <strong>Build custom pipeline</strong> so that the
+            stages could be explicitly configured as Source → Staging →
+            Manual Approval → Production.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>5. Build Stage</h2>
+
+        <div class="step success">
+            <strong>Build stage: skipped.</strong>
+        </div>
+
+        <p>
+            The repository contains a simple HTML/PHP application and does not
+            require compilation or packaging with Maven, Gradle, or CodeBuild.
+            Therefore the source artifact can be passed directly to Elastic Beanstalk.
+        </p>
+
+        <pre>GitHub
+  ↓
+SourceArtifact
+  ↓
+Elastic Beanstalk</pre>
+    </section>
+
+    <section class="card">
+        <h2>6. Test Stage</h2>
+
+        <div class="step success">
+            <strong>Test stage: skipped for this learning setup.</strong>
+        </div>
+
+        <p>
+            A test stage can be added later. For a real production application,
+            automated tests should normally run before the staging deployment
+            or before production promotion.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>7. Elastic Beanstalk Staging Deployment</h2>
+
+        <p>
+            The first Elastic Beanstalk deploy action is the staging deployment.
+        </p>
+
+        <pre>Stage name:
+Deploy-Staging
+
+Provider:
+AWS Elastic Beanstalk
+
+Application:
+&lt;existing Elastic Beanstalk application&gt;
+
+Environment:
+&lt;staging environment&gt;</pre>
+
+        <p>
+            CodePipeline takes the source artifact from GitHub and creates an
+            Elastic Beanstalk application version, then deploys that version
+            to the staging environment.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>8. IAM Permission Problem We Fixed</h2>
+
+        <div class="step error">
+            <strong>Original error:</strong>
+            <br>
+            The provided role does not have the
+            <code>elasticbeanstalk:CreateApplicationVersion</code> permission.
+        </div>
+
+        <p>
+            The role that needed the permission was the CodePipeline service role,
+            not the Elastic Beanstalk EC2/compute role.
+        </p>
+
+        <pre>AWSCodePipelineServiceRole-ap-south-1-git_to_elbean</pre>
+
+        <p>
+            We edited the policy attached to that role and added the permissions
+            required for the Elastic Beanstalk deployment action.
+        </p>
+
+        <p>
+            The important conceptual distinction is:
+        </p>
+
+        <pre>CodePipeline
+    ↓
+AWSCodePipelineServiceRole-...
+    ↓
+Elastic Beanstalk deployment
+
+NOT
+
+CodePipeline
+    ↓
+Elastic Beanstalk Compute Role</pre>
+
+        <div class="step warning">
+            The broad permissions used for the learning setup should be
+            tightened to least privilege for a real production account.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>9. Manual Approval Before Production</h2>
+
+        <p>
+            After staging succeeds, the pipeline should pause for a human decision.
+        </p>
+
+        <pre>Stage:
+ManualApproval
+
+Action:
+ApproveProduction
+
+Provider:
+Manual approval
+
+Message:
+Review the staging Elastic Beanstalk environment
+before releasing this version to production.</pre>
+
+        <p>
+            Optionally provide the staging application URL as the review URL.
+            The approver can open the staging application, test it, and then
+            approve or reject the release.
+        </p>
+
+        <div class="step warning">
+            <strong>Approve:</strong> continue to production.
+            <br>
+            <strong>Reject:</strong> stop the release; production is not updated.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>10. Production Deployment</h2>
+
+        <p>
+            After the manual approval succeeds, add another deploy stage.
+        </p>
+
+        <pre>Stage name:
+Deploy-Production
+
+Provider:
+AWS Elastic Beanstalk
+
+Application:
+&lt;same Elastic Beanstalk application&gt;
+
+Environment:
+&lt;production environment&gt;</pre>
+
+        <p>
+            The important idea is that production receives the same pipeline
+            source artifact that was already deployed to staging.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>11. Final CodePipeline</h2>
+
+        <div class="flow">
+            <div class="box">GitHub</div>
+            <div class="arrow">→</div>
+            <div class="box">Source</div>
+            <div class="arrow">→</div>
+            <div class="box">Deploy-Staging</div>
+            <div class="arrow">→</div>
+            <div class="box">Manual Approval</div>
+            <div class="arrow">→</div>
+            <div class="box">Deploy-Production</div>
+        </div>
+
+        <p>
+            This is one CodePipeline with multiple stages. You do not need
+            a second CodePipeline just because there are staging and production
+            environments.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>12. What Happens After a Git Push?</h2>
+
+        <pre>git add .
+git commit -m "Update application"
+git push origin main</pre>
+
+        <p>The expected flow is:</p>
+
+        <ol>
+            <li>GitHub receives the commit.</li>
+            <li>CodePipeline detects the change.</li>
+            <li>The Source stage downloads the repository.</li>
+            <li>The source artifact is deployed to Elastic Beanstalk staging.</li>
+            <li>The pipeline pauses at Manual Approval.</li>
+            <li>You open and test the staging application.</li>
+            <li>You approve the release.</li>
+            <li>The same artifact is deployed to Elastic Beanstalk production.</li>
+        </ol>
+
+        <div class="step success">
+            <strong>Result:</strong>
+            GitHub → Staging → Human verification → Production.
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>13. Things We Do Not Need for This Setup</h2>
+
+        <ul>
+            <li>Second CodePipeline</li>
+            <li>Docker</li>
+            <li>Amazon ECR</li>
+            <li>Amazon ECS</li>
+            <li>CodeBuild, for the current simple HTML/PHP application</li>
+            <li>Another GitHub connection</li>
+            <li>A separate source stage for production</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>14. Recommended Production Improvements Later</h2>
+
+        <ul>
+            <li>Add automated tests before staging or before production.</li>
+            <li>Add security scanning.</li>
+            <li>Use least-privilege IAM policies instead of broad wildcards.</li>
+            <li>Use separate staging and production configuration/secrets.</li>
+            <li>Add monitoring and rollback procedures.</li>
+            <li>Consider deployment strategies such as rolling or immutable deployments.</li>
+            <li>Protect the production environment from accidental changes.</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>15. Final Mental Model</h2>
+
+        <pre>
+Developer
+   │
+   │ git push
+   ▼
+GitHub
+   │
+   │ source artifact
+   ▼
+AWS CodePipeline
+   │
+   ├── Source
+   │
+   ├── Deploy to Elastic Beanstalk STAGING
+   │
+   ├── Manual Approval
+   │
+   └── Deploy to Elastic Beanstalk PRODUCTION
+        </pre>
+
+        <p>
+            CodePipeline is the orchestrator. GitHub is the source.
+            Elastic Beanstalk environments are the deployment targets.
+            Manual approval is the gate between staging and production.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    AWS CI/CD learning project — GitHub → CodePipeline → Elastic Beanstalk
+</footer>
+
 </body>
 </html>
