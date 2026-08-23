@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Bean - Getting Started</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .intro {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .version {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2196F3;
+            margin: 15px 0;
+        }
+        .steps {
+            margin-top: 30px;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        .step h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .step p {
+            margin: 10px 0;
+            color: #555;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 Elastic Bean</h1>
+        
+        <div class="intro">
+            <p>Welcome to Elastic Bean! This is a comprehensive guide to help you get started with creating and deploying applications using AWS Elastic Beanstalk. Elastic Bean simplifies the process of deploying web applications and services to the cloud, handling the infrastructure so you can focus on your code.</p>
+        </div>
+
+        <div class="version">
+            ✓ First Version for Elastic Bean
+        </div>
+
+        <div class="steps">
+            <h2>Steps to Create Elastic Bean</h2>
+
+            <div class="step">
+                <h3>Step 1: Install AWS CLI</h3>
+                <p>First, you need to install the AWS Command Line Interface (CLI) on your machine.</p>
+                <p><code>pip install awscli</code></p>
+                <p>Verify the installation with: <code>aws --version</code></p>
+            </div>
+
+            <div class="step">
+                <h3>Step 2: Configure AWS Credentials</h3>
+                <p>Set up your AWS credentials using:</p>
+                <p><code>aws configure</code></p>
+                <p>You'll be prompted to enter your AWS Access Key ID, Secret Access Key, default region, and output format.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 3: Install Elastic Beanstalk CLI</h3>
+                <p>Install the Elastic Beanstalk command line tool:</p>
+                <p><code>pip install awsebcli</code></p>
+                <p>Verify with: <code>eb --version</code></p>
+            </div>
+
+            <div class="step">
+                <h3>Step 4: Create Your Application</h3>
+                <p>Prepare your application code in a directory. For a Python app, create a simple structure:</p>
+                <p><code>application.py</code> or <code>app.py</code></p>
+                <p>Make sure your application listens on port 5000 or configure the appropriate port.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 5: Initialize Elastic Beanstalk</h3>
+                <p>Navigate to your application directory and initialize Elastic Beanstalk:</p>
+                <p><code>eb init -p python-3.9 my-app</code></p>
+                <p>Choose your default region and other preferences when prompted.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 6: Create an Environment</h3>
+                <p>Create an Elastic Beanstalk environment for your application:</p>
+                <p><code>eb create production-env</code></p>
+                <p>This will set up the necessary AWS resources (EC2 instances, load balancers, etc.)</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 7: Deploy Your Application</h3>
+                <p>Deploy your code to the environment:</p>
+                <p><code>eb deploy</code></p>
+                <p>Your application will be uploaded and deployed automatically.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 8: Open Your Application</h3>
+                <p>View your deployed application in the browser:</p>
+                <p><code>eb open</code></p>
+                <p>This will automatically open your application URL in your default browser.</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 9: Monitor Your Application</h3>
+                <p>Check the health and logs of your application:</p>
+                <p><code>eb health</code> - View environment health</p>
+                <p><code>eb logs</code> - View application logs</p>
+            </div>
+
+            <div class="step">
+                <h3>Step 10: Clean Up</h3>
+                <p>When done, terminate your environment to avoid incurring charges:</p>
+                <p><code>eb terminate production-env</code></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
